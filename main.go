@@ -30,6 +30,35 @@ func (arr *Array) FindIndex(callback func(element string) bool) int {
 	return -1
 }
 
+func (arr *Array) Includes(valueToFind string, fromIndex ...int) bool {
+	if len(fromIndex) > 1 {
+		panic(ErrInvalidSyntax)
+	}
+	a := arr.internal
+	s := len(*a)
+	start := 0
+	if len(fromIndex) == 1 {
+		fI := fromIndex[0]
+		if fI >= s {
+			return false
+		}
+		if fI < 0 {
+			computedIndex := s + fI
+			if !(computedIndex <= -1*s) {
+				start = computedIndex
+			}
+		} else {
+			start = fI
+		}
+	}
+	for i := start; i < s; i++ {
+		if (*a)[i] == valueToFind {
+			return true
+		}
+	}
+	return false
+}
+
 func (arr *Array) Pop() string {
 	a := arr.internal
 	s := len(*a)
@@ -61,6 +90,18 @@ func (arr *Array) Shift() string {
 	r := (*a)[0]
 	*a = (*a)[1:]
 	return r
+}
+
+// thisArg parameter has not been implemented
+func (arr *Array) Some(callback func(element string) bool) bool {
+	a := arr.internal
+	for _, v := range *a {
+		// index, array parameters have not been implemented
+		if callback(v) {
+			return true
+		}
+	}
+	return false
 }
 
 // compareFn parameter has not been implemented
