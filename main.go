@@ -19,6 +19,19 @@ func (a Array) String() string {
 	return fmt.Sprintf("Array{%v}", *a.internal)
 }
 
+func (arr *Array) At(index int) string {
+	a := arr.internal
+	s := len(*a)
+	if index < 0 {
+		index += s
+	}
+	if index > s-1 {
+		// spec mentions undefined return value
+		return ""
+	}
+	return (*a)[index]
+}
+
 // thisArg parameter has not been implemented
 func (arr *Array) Every(callback func(element string) bool) bool {
 	a := arr.internal
@@ -32,6 +45,19 @@ func (arr *Array) Every(callback func(element string) bool) bool {
 }
 
 // thisArg parameter has not been implemented
+func (arr *Array) Find(callback func(element string) bool) string {
+	a := arr.internal
+	for _, v := range *a {
+		// index, array parameters have not been implemented
+		if callback(v) {
+			return v
+		}
+	}
+	// spec mentions undefined return value
+	return ""
+}
+
+// thisArg parameter has not been implemented
 func (arr *Array) FindIndex(callback func(element string) bool) int {
 	a := arr.internal
 	for i, v := range *a {
@@ -41,6 +67,18 @@ func (arr *Array) FindIndex(callback func(element string) bool) int {
 		}
 	}
 	return -1
+}
+
+// thisArg parameter has not been implemented
+func (arr *Array) ForEach(callback func(element string)) *string {
+	a := arr.internal
+	for _, v := range *a {
+		// index, array parameters have not been implemented
+		callback(v)
+		// Compared to JS, callback is limited here due to strict function type assertion
+	}
+	// spec mentions undefined return value
+	return nil
 }
 
 func (arr *Array) Includes(valueToFind string, fromIndex ...int) bool {
