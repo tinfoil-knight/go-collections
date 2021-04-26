@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strings"
 )
 
 var (
@@ -16,6 +17,18 @@ type Array struct {
 
 func (a Array) String() string {
 	return fmt.Sprintf("Array{%v}", *a.internal)
+}
+
+// thisArg parameter has not been implemented
+func (arr *Array) Every(callback func(element string) bool) bool {
+	a := arr.internal
+	for _, v := range *a {
+		// index, array parameters have not been implemented
+		if !callback(v) {
+			return false
+		}
+	}
+	return true
 }
 
 // thisArg parameter has not been implemented
@@ -57,6 +70,18 @@ func (arr *Array) Includes(valueToFind string, fromIndex ...int) bool {
 		}
 	}
 	return false
+}
+
+func (arr *Array) Join(separator ...string) string {
+	if len(separator) > 1 {
+		panic(ErrInvalidSyntax)
+	}
+	sep := ""
+	if len(separator) == 1 {
+		sep = separator[0]
+	}
+	a := arr.internal
+	return strings.Join(*a, sep)
 }
 
 func (arr *Array) Pop() string {
@@ -109,6 +134,12 @@ func (arr *Array) Sort() *Array {
 	a := arr.internal
 	sort.Strings(*a)
 	return arr
+}
+
+func (arr *Array) Unshift(elementN ...string) int {
+	a := arr.internal
+	*a = append(elementN, *a...)
+	return len(*a)
 }
 
 func main() {
