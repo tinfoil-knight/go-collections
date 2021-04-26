@@ -72,6 +72,35 @@ func (arr *Array) Includes(valueToFind string, fromIndex ...int) bool {
 	return false
 }
 
+func (arr *Array) IndexOf(searchElement string, fromIndex ...int) int {
+	if len(fromIndex) > 1 {
+		panic(ErrInvalidSyntax)
+	}
+	a := arr.internal
+	s := len(*a)
+	start := 0
+	if len(fromIndex) == 1 {
+		fI := fromIndex[0]
+		if fI >= s {
+			return -1
+		}
+		if fI < 0 {
+			computedIndex := s + fI
+			if !(computedIndex <= -1*s) {
+				start = computedIndex
+			}
+		} else {
+			start = fI
+		}
+	}
+	for i := start; i < s; i++ {
+		if (*a)[i] == searchElement {
+			return i
+		}
+	}
+	return -1
+}
+
 func (arr *Array) Join(separator ...string) string {
 	if len(separator) > 1 {
 		panic(ErrInvalidSyntax)
