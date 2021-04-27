@@ -45,6 +45,19 @@ func (arr *Array) Every(callback func(element string) bool) bool {
 }
 
 // thisArg parameter has not been implemented
+func (arr *Array) Filter(callback func(element string) bool) *Array {
+	a := arr.internal
+	var n []string
+	for i, v := range n {
+		// index, array parameters have not been implemented
+		if callback(v) {
+			n = append(n, (*a)[i])
+		}
+	}
+	return &Array{&n}
+}
+
+// thisArg parameter has not been implemented
 func (arr *Array) Find(callback func(element string) bool) string {
 	a := arr.internal
 	for _, v := range *a {
