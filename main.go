@@ -151,6 +151,17 @@ func (arr *Array) Join(separator ...string) string {
 	return strings.Join(*a, sep)
 }
 
+// thisArg parameter has not been implemented
+func (arr *Array) Map(callback func(element string) string) *Array {
+	a := arr.internal
+	n := (*a)[:]
+	for i, v := range n {
+		// index, array parameters have not been implemented
+		n[i] = callback(v)
+	}
+	return &Array{&n}
+}
+
 func (arr *Array) Pop() string {
 	a := arr.internal
 	s := len(*a)
